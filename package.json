@@ -1,0 +1,86 @@
+{
+  "name": "1000fetches",
+  "version": "0.3.0",
+  "description": "A modern, type-safe HTTP client for TypeScript with built-in schema validation, middleware, opt-in retry logic, and compile-time path parameter validation. Features full TypeScript support, request/response middleware, and schema validation using Standard Schema-compatible libraries.",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "docs",
+    "skills",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc --noEmit && vite build",
+    "dev": "vite build --watch",
+    "test": "yarn test:types && yarn test:unit",
+    "test:unit": "vitest --run",
+    "test:exports": "node scripts/smoke-exports.mjs",
+    "test:watch": "yarn test:types && vitest",
+    "test:coverage": "yarn test:types && vitest --coverage",
+    "test:types": "tsc --noEmit && tsc --noEmit --project tsconfig.test.json",
+    "tsc": "yarn test:types",
+    "lint": "yarn lint:code && prettier --check .",
+    "lint:code": "eslint src vite.config.ts vitest.config.ts",
+    "lint:fix": "eslint src vite.config.ts vitest.config.ts --fix && prettier --write .",
+    "bundle:analyze": "LIB_BUILD=true vite build --mode analyze",
+    "bundle:size": "node scripts/bundle-size.js",
+    "bundle": "LIB_BUILD=true vite build && yarn bundle:size",
+    "package:smoke": "yarn build && yarn test:exports && npm pack --dry-run --json",
+    "clean": "rm -rf dist coverage",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "keywords": [
+    "http",
+    "client",
+    "typescript",
+    "fetch",
+    "axios",
+    "api",
+    "schema",
+    "validation",
+    "zod",
+    "valibot",
+    "arktype"
+  ],
+  "author": "Max Tarsis <tarsis.maksym@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "22.20.0",
+    "@vitest/coverage-v8": "4.1.9",
+    "arktype": "2.2.1",
+    "eslint": "^10.6.0",
+    "eslint-config-prettier": "^10.1.8",
+    "expect-type": "1.4.0",
+    "msw": "2.14.6",
+    "rollup-plugin-visualizer": "7.0.1",
+    "terser": "5.48.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "^8.62.0",
+    "valibot": "1.4.2",
+    "vite": "8.1.0",
+    "vite-plugin-dts": "5.0.3",
+    "vitest": "4.1.9",
+    "zod": "4.4.3",
+    "prettier": "3.9.1"
+  },
+  "dependencies": {
+    "@standard-schema/spec": "^1.1.0"
+  },
+  "packageManager": "yarn@1.22.22",
+  "resolutions": {
+    "vite": "8.1.0"
+  }
+}
