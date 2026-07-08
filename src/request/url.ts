@@ -1,5 +1,26 @@
 import { InvalidBaseUrlError } from '../errors'
 
+export function validateAndNormalizeBaseUrl(baseUrl?: string): string {
+  if (!baseUrl) {
+    return ''
+  }
+
+  if (baseUrl.startsWith('/')) {
+    return baseUrl.replace(/\/$/, '')
+  }
+
+  try {
+    new URL(baseUrl)
+  } catch {
+    throw new InvalidBaseUrlError(
+      `Invalid baseUrl: "${baseUrl}". Must be a valid absolute URL or relative path starting with "/".`,
+      baseUrl
+    )
+  }
+
+  return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl
+}
+
 export function constructUrl(baseUrl: string, requestUrl: string): string {
   if (isAbsoluteUrl(requestUrl)) {
     return requestUrl

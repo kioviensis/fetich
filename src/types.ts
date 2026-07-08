@@ -94,6 +94,49 @@ export interface RequestOptions<TBody = unknown> {
   retry?: RetryOptions | boolean
 }
 
+export interface HttpRequestOptions<
+  TBody = unknown,
+  TParams extends RequestParamsType = RequestParamsType,
+> extends Omit<RequestOptions<TBody>, 'params'> {
+  method?: HttpMethod
+  /** Query parameters */
+  params?: TParams
+}
+
+export interface RequestDefaults {
+  headers?: HttpHeaders
+  params?: RequestParamsType
+  timeout?: number
+  credentials?: RequestCredentials
+  cache?: RequestCache
+  mode?: RequestMode
+  redirect?: RequestRedirect
+  fetchOptions?: FetchOptions
+  responseType?: HttpRequestOptions['responseType']
+  retry?: RetryOptions | boolean
+}
+
+export interface RequestDefaultsContext<
+  TBody = unknown,
+  TParams extends RequestParamsType = RequestParamsType,
+  Path extends string = string,
+> {
+  /** Raw path or URL passed by the caller before path parameter generation */
+  path: Path
+  /** Path after template parameter generation, before baseUrl and query params */
+  resolvedPath: string
+  method: HttpMethod
+  params?: TParams
+  pathParams?: Record<string, string | number | undefined>
+  body?: TBody
+  hasBody: boolean
+  requestOptions: Readonly<HttpRequestOptions<TBody, TParams>>
+  baseUrl: string
+  headers: HttpHeaders
+  timeout: number
+  retry?: RetryOptions | boolean
+}
+
 export interface ResponseType<T = unknown> {
   data: T
   status: number

@@ -32,8 +32,11 @@ export type {
   InferContractSuccess,
   HttpHeaders,
   HttpMethod,
+  HttpRequestOptions,
   InferSchemaOutput,
   RequestContext,
+  RequestDefaults,
+  RequestDefaultsContext,
   RequestOptions,
   RequestParamsType,
   ResponseContract,
@@ -51,10 +54,5 @@ export type {
 } from './types'
 
 export type { HttpClient } from './client'
-export type {
-  HttpClientConfig,
-  HttpRequestOptions,
-  RequestDefaults,
-  RequestDefaultsContext,
-} from './core'
+export type { HttpClientConfig } from './core'
 export type { SchemaValidator } from './schema'

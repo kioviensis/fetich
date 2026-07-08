@@ -1,4 +1,3 @@
-import type { HttpRequestOptions } from '../core'
 import {
   ContractValidationError,
   HttpError,
@@ -11,6 +10,7 @@ import { isSuccessfulStatus, successStatusValidator } from '../status'
 import type {
   InferContractSuccess,
   InferSchemaOutput,
+  HttpRequestOptions,
   RequestParamsType,
   ResponseContract,
   ResponseContractBranch,

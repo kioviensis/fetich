@@ -1,17 +1,19 @@
-import type { HttpClientConfig, HttpRequestOptions } from '../core'
+import type { HttpClientConfig } from '../core'
 import { createHttpRequest } from '../core'
 import {
   createContractRequestOptions,
   validateResponseContractShape,
   validateResponsePromiseWithContract,
 } from '../contract'
-import { InvalidBaseUrlError, InvalidContractError } from '../errors'
+import { InvalidContractError } from '../errors'
+import { validateAndNormalizeBaseUrl } from '../request/url'
 import { createSchemaValidator } from '../schema'
 import type { SchemaValidator } from '../schema'
 import type {
   ContractableResponse,
   EnforcedPathParamsOptions,
   ExtractableResponse,
+  HttpRequestOptions,
   InferContractSuccess,
   RequestParamsType,
   ResponseContract,
@@ -41,27 +43,6 @@ type EnforcedHttpRequestOptions<
     ? HttpRequestOptions<TBody, TParams>
     : Omit<HttpRequestOptions<TBody, TParams>, 'pathParams'>
 >
-
-function validateAndNormalizeBaseUrl(baseUrl?: string): string {
-  if (!baseUrl) {
-    return ''
-  }
-
-  if (baseUrl.startsWith('/')) {
-    return baseUrl.replace(/\/$/, '')
-  }
-
-  try {
-    new URL(baseUrl)
-  } catch {
-    throw new InvalidBaseUrlError(
-      `Invalid baseUrl: "${baseUrl}". Must be a valid absolute URL or relative path starting with "/".`,
-      baseUrl
-    )
-  }
-
-  return baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl
-}
 
 function createExtractableResponse<T>(
   promise: Promise<ResponseType<T>>

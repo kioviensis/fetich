@@ -1,0 +1,406 @@
+{
+  "version": 1,
+  "fallbackRoute": "fallback",
+  "matching": {
+    "threshold": 10,
+    "taskModePrecedence": [
+      "harness",
+      "tests",
+      "refactor",
+      "fix",
+      "docs",
+      "release",
+      "implement"
+    ]
+  },
+  "references": {
+    "raw": {
+      "AGENTS.md": "AGENTS.md",
+      "CLAUDE.md": "CLAUDE.md"
+    },
+    "guides": {
+      "guide:agent-workflow": "docs/ai-agents/README.md",
+      "guide:library-workflows": "docs/ai-agents/library-workflows.md",
+      "guide:testing-verification": "docs/ai-agents/testing-and-verification.md",
+      "guide:harness-readme": ".agents/README.md",
+      "guide:router-readme": ".agents/router/README.md",
+      "guide:readme": "README.md",
+      "guide:best-practices": "docs/BEST_PRACTICES.md"
+    },
+    "skills": {
+      "skill:1000fetches": "skills/1000fetches/SKILL.md",
+      "skill:implement-library-change": ".agents/skills/implement-library-change/SKILL.md",
+      "skill:fix-library-regression": ".agents/skills/fix-library-regression/SKILL.md",
+      "skill:refactor-library-surface": ".agents/skills/refactor-library-surface/SKILL.md",
+      "skill:cover-library-with-tests": ".agents/skills/cover-library-with-tests/SKILL.md"
+    },
+    "globalSkills": {
+      "global:audit-agent-harness": "audit-agent-harness",
+      "global:create-agent-harness": "create-agent-harness",
+      "global:sync-agent-harness": "sync-agent-harness",
+      "global:improve-agent-harness": "improve-agent-harness"
+    },
+    "overlays": {
+      "overlay:routing-audit": "docs/ai-agents/README.md#Routing Audit Contract",
+      "overlay:dry-run": "docs/ai-agents/README.md#Dry Run Contract",
+      "overlay:verification-only": "docs/ai-agents/testing-and-verification.md#Reporting"
+    },
+    "adapters": {
+      "adapter:claude": "CLAUDE.md"
+    },
+    "commands": {
+      "command:agents-route": {
+        "script": "agents:route",
+        "description": "Print a route suggestion for a task prompt."
+      },
+      "command:check-agents": {
+        "script": "check:agents",
+        "description": "Run aggregate harness validation."
+      },
+      "command:check-changed": {
+        "script": "check:changed",
+        "description": "Print changed-file verification recommendations."
+      },
+      "command:test-types": {
+        "script": "test:types",
+        "description": "Run runtime and test TypeScript checks."
+      },
+      "command:test-unit": {
+        "script": "test:unit",
+        "description": "Run Vitest tests, optionally focused by file path."
+      },
+      "command:lint": {
+        "script": "lint",
+        "description": "Run ESLint and Prettier checks."
+      },
+      "command:format-check": {
+        "script": "format:check",
+        "description": "Run Prettier check."
+      },
+      "command:build": {
+        "script": "build",
+        "description": "Run package typecheck and Vite build."
+      },
+      "command:test-exports": {
+        "script": "test:exports",
+        "description": "Run ESM/CJS export smoke checks."
+      },
+      "command:package-smoke": {
+        "script": "package:smoke",
+        "description": "Run build, export smoke, and npm pack dry run."
+      }
+    }
+  },
+  "routes": [
+    {
+      "id": "harness-maintenance",
+      "description": "Agent harness docs, router, local skills, adapters, or changed-file checks.",
+      "priority": 100,
+      "skill": null,
+      "taskModes": ["harness"],
+      "triggers": {
+        "keywords": [
+          "agent harness",
+          "agents",
+          "router",
+          "route eval",
+          "adapter",
+          "check:agents",
+          "check:changed",
+          "local skill",
+          "sync harness",
+          "audit harness",
+          "improve harness",
+          "create harness"
+        ],
+        "paths": ["AGENTS.md", "CLAUDE.md", ".agents/**", "docs/ai-agents/**"],
+        "regex": ["\\b(sync|audit|improve|create)\\s+.*harness\\b"]
+      },
+      "mandatory": [
+        "AGENTS.md",
+        "guide:agent-workflow",
+        "guide:harness-readme",
+        "guide:router-readme"
+      ],
+      "conditional": [
+        "global:audit-agent-harness",
+        "global:create-agent-harness",
+        "global:sync-agent-harness",
+        "global:improve-agent-harness"
+      ],
+      "notSelected": [
+        "skill:implement-library-change",
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "verification": ["command:check-agents", "command:format-check"]
+    },
+    {
+      "id": "test-coverage",
+      "description": "Add or improve tests for existing behavior.",
+      "priority": 95,
+      "skill": "skill:cover-library-with-tests",
+      "taskModes": ["tests"],
+      "triggers": {
+        "keywords": [
+          "add tests",
+          "write tests",
+          "coverage",
+          "typecheck",
+          "expect-type",
+          "regression test"
+        ],
+        "paths": [
+          "src/**/*.test.ts",
+          "src/**/*.integration.test.ts",
+          "src/**/*.typecheck.ts",
+          "src/testing/**"
+        ],
+        "regex": ["\\b(add|write|cover|improve)\\b.*\\btests?\\b"]
+      },
+      "mandatory": [
+        "AGENTS.md",
+        "skill:cover-library-with-tests",
+        "guide:testing-verification",
+        "guide:library-workflows",
+        "skill:1000fetches"
+      ],
+      "conditional": ["guide:readme", "guide:best-practices"],
+      "notSelected": [
+        "skill:implement-library-change",
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface"
+      ],
+      "verification": [
+        "command:test-unit",
+        "command:test-types",
+        "command:check-changed"
+      ]
+    },
+    {
+      "id": "refactor-library-surface",
+      "description": "Behavior-preserving refactors in library internals or public surface.",
+      "priority": 90,
+      "skill": "skill:refactor-library-surface",
+      "taskModes": ["refactor"],
+      "triggers": {
+        "keywords": [
+          "refactor",
+          "cleanup",
+          "extract",
+          "simplify",
+          "reorganize"
+        ],
+        "paths": ["src/**"],
+        "regex": ["\\bwithout\\s+changing\\s+behavior\\b"]
+      },
+      "mandatory": [
+        "AGENTS.md",
+        "skill:refactor-library-surface",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "skill:1000fetches"
+      ],
+      "conditional": ["guide:readme", "guide:best-practices"],
+      "notSelected": [
+        "skill:fix-library-regression",
+        "skill:cover-library-with-tests"
+      ],
+      "verification": [
+        "command:test-types",
+        "command:test-unit",
+        "command:check-changed"
+      ]
+    },
+    {
+      "id": "fix-library-regression",
+      "description": "Bug diagnosis and repair for runtime behavior, errors, contracts, retries, middleware, URLs, or types.",
+      "priority": 85,
+      "skill": "skill:fix-library-regression",
+      "taskModes": ["fix"],
+      "triggers": {
+        "keywords": [
+          "fix",
+          "bug",
+          "failing",
+          "failure",
+          "regression",
+          "broken",
+          "diagnose",
+          "repro",
+          "timeout"
+        ],
+        "paths": ["src/**"],
+        "regex": [
+          "\\b(failing|broken)\\s+.*\\b(test|type|contract|retry|middleware|request|url)\\b"
+        ]
+      },
+      "mandatory": [
+        "AGENTS.md",
+        "skill:fix-library-regression",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "skill:1000fetches"
+      ],
+      "conditional": ["guide:readme", "guide:best-practices"],
+      "notSelected": [
+        "skill:implement-library-change",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "verification": [
+        "command:test-unit",
+        "command:test-types",
+        "command:check-changed"
+      ]
+    },
+    {
+      "id": "docs-update",
+      "description": "README, best practices, packaged skill references, and usage examples.",
+      "priority": 80,
+      "skill": null,
+      "taskModes": ["docs"],
+      "triggers": {
+        "keywords": [
+          "docs",
+          "documentation",
+          "document",
+          "readme",
+          "best practices",
+          "example",
+          "skill reference"
+        ],
+        "paths": ["README.md", "docs/**", "skills/1000fetches/**"],
+        "regex": ["\\b(update|write|fix)\\s+.*\\b(docs|readme|examples?)\\b"]
+      },
+      "mandatory": [
+        "AGENTS.md",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "guide:readme",
+        "skill:1000fetches"
+      ],
+      "conditional": ["guide:best-practices"],
+      "notSelected": [
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "verification": ["command:format-check", "command:check-changed"]
+    },
+    {
+      "id": "public-api-and-package",
+      "description": "Public exports, package entrypoints, build config, package smoke, or npm package shape.",
+      "priority": 75,
+      "skill": null,
+      "taskModes": ["release"],
+      "triggers": {
+        "keywords": [
+          "public api",
+          "exports",
+          "export surface",
+          "package smoke",
+          "package.json",
+          "npm pack",
+          "release",
+          "build"
+        ],
+        "paths": [
+          "src/index.ts",
+          "package.json",
+          "vite.config.ts",
+          "vitest.config.ts",
+          "scripts/smoke-exports.mjs",
+          "yarn.lock"
+        ],
+        "regex": ["\\b(package|export|exports)\\s+(surface|smoke|shape)\\b"]
+      },
+      "mandatory": [
+        "AGENTS.md",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "guide:readme",
+        "skill:1000fetches"
+      ],
+      "conditional": ["guide:best-practices", "skill:implement-library-change"],
+      "notSelected": [
+        "skill:fix-library-regression",
+        "skill:cover-library-with-tests"
+      ],
+      "verification": [
+        "command:test-types",
+        "command:build",
+        "command:test-exports",
+        "command:package-smoke"
+      ]
+    },
+    {
+      "id": "implement-library-change",
+      "description": "Feature or behavior implementation in the TypeScript library.",
+      "priority": 60,
+      "skill": "skill:implement-library-change",
+      "taskModes": ["implement"],
+      "triggers": {
+        "keywords": [
+          "add",
+          "implement",
+          "change",
+          "support",
+          "create",
+          "update",
+          "feature",
+          "defaults",
+          "contract",
+          "middleware",
+          "retry",
+          "serialization",
+          "path params"
+        ],
+        "paths": ["src/**"],
+        "regex": [
+          "\\b(add|implement|support|change)\\b.*\\b(client|request|contract|schema|retry|middleware|defaults|serialization|path)\\b"
+        ]
+      },
+      "mandatory": [
+        "AGENTS.md",
+        "skill:implement-library-change",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "skill:1000fetches"
+      ],
+      "conditional": ["guide:readme", "guide:best-practices"],
+      "notSelected": [
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "verification": [
+        "command:test-types",
+        "command:test-unit",
+        "command:check-changed"
+      ]
+    },
+    {
+      "id": "fallback",
+      "description": "Ambiguous work that needs source inspection before selecting a narrower workflow.",
+      "priority": 0,
+      "skill": null,
+      "taskModes": [],
+      "triggers": {
+        "keywords": [],
+        "paths": [],
+        "regex": []
+      },
+      "mandatory": ["AGENTS.md", "guide:agent-workflow"],
+      "conditional": ["guide:library-workflows", "guide:testing-verification"],
+      "notSelected": [
+        "skill:implement-library-change",
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "verification": ["command:agents-route"]
+    }
+  ]
+}

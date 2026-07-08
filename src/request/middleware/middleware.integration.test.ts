@@ -298,6 +298,51 @@ it('should handle middleware that returns same URL', async () => {
   expect(response.status).toBe(200)
 })
 
+it('should isolate request middleware mutations from caller options', async () => {
+  const fetchMock = vi.fn(async () => {
+    return HttpResponse.json({ ok: true })
+  }) as unknown as typeof fetch
+  const requestOptions = {
+    params: { page: 1 },
+    headers: { 'x-request': 'original' },
+    fetchOptions: { keepalive: false },
+  }
+  const middleware = vi.fn(context => {
+    context.params = {
+      ...context.params,
+      page: 2,
+    }
+    context.headers.set('x-request', 'middleware')
+    context.fetchOptions.keepalive = true
+  })
+
+  const clientWithMiddleware = createHttpClient({
+    fetch: fetchMock,
+    onRequestMiddleware: middleware,
+  })
+
+  await clientWithMiddleware.get(
+    'https://api.example.com/users',
+    requestOptions
+  )
+
+  expect(fetchMock).toHaveBeenCalledWith(
+    'https://api.example.com/users?page=2',
+    expect.objectContaining({
+      keepalive: true,
+      headers: expect.any(Headers),
+    })
+  )
+  expect(
+    new Headers(vi.mocked(fetchMock).mock.calls[0][1]?.headers).get('x-request')
+  ).toBe('middleware')
+  expect(requestOptions).toEqual({
+    params: { page: 1 },
+    headers: { 'x-request': 'original' },
+    fetchOptions: { keepalive: false },
+  })
+})
+
 it('should handle response middleware that returns undefined', async () => {
   const onResponseMiddleware = vi.fn(() => {
     return undefined as any // Invalid return - should trigger validation error

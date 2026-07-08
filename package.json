@@ -15,7 +15,7 @@
   },
   "files": [
     "dist",
-    "docs",
+    "docs/BEST_PRACTICES.md",
     "skills",
     "LICENSE"
   ],
@@ -39,7 +39,17 @@
     "package:smoke": "yarn build && yarn test:exports && npm pack --dry-run --json",
     "clean": "rm -rf dist coverage",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "agents:cli": "node --experimental-strip-types .agents/router/src/cli.ts",
+    "agents:route": "yarn agents:cli route",
+    "agents:validate": "yarn agents:cli validate",
+    "agents:eval": "yarn agents:cli eval",
+    "agents:harness": "yarn agents:cli harness",
+    "agents:changed": "yarn agents:cli changed",
+    "agents:self-test": "yarn agents:cli self-test",
+    "agents:typecheck": "tsc --noEmit --project .agents/router/tsconfig.json",
+    "check:agents": "yarn agents:typecheck && yarn agents:cli check",
+    "check:changed": "yarn agents:cli changed"
   },
   "keywords": [
     "http",

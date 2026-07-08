@@ -1,0 +1,227 @@
+{
+  "cases": [
+    {
+      "id": "implement-defaults",
+      "prompt": "Add dynamic default headers in src/request/defaults.ts",
+      "expectedRoute": "implement-library-change",
+      "expectedSkill": "skill:implement-library-change",
+      "expectedMandatory": [
+        "AGENTS.md",
+        "skill:implement-library-change",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "skill:1000fetches"
+      ],
+      "expectedConditional": ["guide:readme", "guide:best-practices"],
+      "expectedNotSelected": [
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "expectedOverlays": []
+    },
+    {
+      "id": "fix-retry-regression",
+      "prompt": "Fix failing retry test in src/request/retry/retry.integration.test.ts",
+      "expectedRoute": "fix-library-regression",
+      "expectedSkill": "skill:fix-library-regression",
+      "expectedMandatory": [
+        "AGENTS.md",
+        "skill:fix-library-regression",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "skill:1000fetches"
+      ],
+      "expectedConditional": ["guide:readme", "guide:best-practices"],
+      "expectedNotSelected": [
+        "skill:implement-library-change",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "expectedOverlays": []
+    },
+    {
+      "id": "refactor-error-helpers",
+      "prompt": "Refactor error helpers without changing public error behavior",
+      "expectedRoute": "refactor-library-surface",
+      "expectedSkill": "skill:refactor-library-surface",
+      "expectedMandatory": [
+        "AGENTS.md",
+        "skill:refactor-library-surface",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "skill:1000fetches"
+      ],
+      "expectedConditional": ["guide:readme", "guide:best-practices"],
+      "expectedNotSelected": [
+        "skill:fix-library-regression",
+        "skill:cover-library-with-tests"
+      ],
+      "expectedOverlays": []
+    },
+    {
+      "id": "cover-path-types",
+      "prompt": "Add type tests for src/utils/path.ts path params",
+      "expectedRoute": "test-coverage",
+      "expectedSkill": "skill:cover-library-with-tests",
+      "expectedMandatory": [
+        "AGENTS.md",
+        "skill:cover-library-with-tests",
+        "guide:testing-verification",
+        "guide:library-workflows",
+        "skill:1000fetches"
+      ],
+      "expectedConditional": ["guide:readme", "guide:best-practices"],
+      "expectedNotSelected": [
+        "skill:implement-library-change",
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface"
+      ],
+      "expectedOverlays": []
+    },
+    {
+      "id": "document-retry",
+      "prompt": "Document retry behavior in docs/BEST_PRACTICES.md",
+      "expectedRoute": "docs-update",
+      "expectedSkill": null,
+      "expectedMandatory": [
+        "AGENTS.md",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "guide:readme",
+        "skill:1000fetches"
+      ],
+      "expectedConditional": ["guide:best-practices"],
+      "expectedNotSelected": [
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "expectedOverlays": []
+    },
+    {
+      "id": "package-smoke",
+      "prompt": "Run package smoke and check the export surface",
+      "expectedRoute": "public-api-and-package",
+      "expectedSkill": null,
+      "expectedMandatory": [
+        "AGENTS.md",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "guide:readme",
+        "skill:1000fetches"
+      ],
+      "expectedConditional": [
+        "guide:best-practices",
+        "skill:implement-library-change"
+      ],
+      "expectedNotSelected": [
+        "skill:fix-library-regression",
+        "skill:cover-library-with-tests"
+      ],
+      "expectedOverlays": []
+    },
+    {
+      "id": "sync-harness-evals",
+      "prompt": "Sync stale harness router evals and adapter guidance",
+      "expectedRoute": "harness-maintenance",
+      "expectedSkill": null,
+      "expectedMandatory": [
+        "AGENTS.md",
+        "guide:agent-workflow",
+        "guide:harness-readme",
+        "guide:router-readme"
+      ],
+      "expectedConditional": [
+        "global:audit-agent-harness",
+        "global:create-agent-harness",
+        "global:sync-agent-harness",
+        "global:improve-agent-harness"
+      ],
+      "expectedNotSelected": [
+        "skill:implement-library-change",
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "expectedOverlays": []
+    },
+    {
+      "id": "ambiguous-fallback",
+      "prompt": "What should I look at?",
+      "expectedRoute": "fallback",
+      "expectedSkill": null,
+      "expectedMandatory": ["AGENTS.md", "guide:agent-workflow"],
+      "expectedConditional": [
+        "guide:library-workflows",
+        "guide:testing-verification"
+      ],
+      "expectedNotSelected": [
+        "skill:implement-library-change",
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "expectedOverlays": []
+    },
+    {
+      "id": "dry-run-implement",
+      "prompt": "Dry run: add support for URLSearchParams serialization in src/request/serialization/serialization.ts",
+      "expectedRoute": "implement-library-change",
+      "expectedSkill": "skill:implement-library-change",
+      "expectedMandatory": [
+        "AGENTS.md",
+        "skill:implement-library-change",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "skill:1000fetches"
+      ],
+      "expectedConditional": ["guide:readme", "guide:best-practices"],
+      "expectedNotSelected": [
+        "skill:fix-library-regression",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "expectedOverlays": ["overlay:dry-run"]
+    },
+    {
+      "id": "routing-audit-fix",
+      "prompt": "Routing audit: fix bug in src/request/url.ts",
+      "expectedRoute": "fix-library-regression",
+      "expectedSkill": "skill:fix-library-regression",
+      "expectedMandatory": [
+        "AGENTS.md",
+        "skill:fix-library-regression",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "skill:1000fetches"
+      ],
+      "expectedConditional": ["guide:readme", "guide:best-practices"],
+      "expectedNotSelected": [
+        "skill:implement-library-change",
+        "skill:refactor-library-surface",
+        "skill:cover-library-with-tests"
+      ],
+      "expectedOverlays": ["overlay:routing-audit"]
+    },
+    {
+      "id": "verification-only-refactor",
+      "prompt": "Verify only: refactor request option helpers in src/request/options.ts",
+      "expectedRoute": "refactor-library-surface",
+      "expectedSkill": "skill:refactor-library-surface",
+      "expectedMandatory": [
+        "AGENTS.md",
+        "skill:refactor-library-surface",
+        "guide:library-workflows",
+        "guide:testing-verification",
+        "skill:1000fetches"
+      ],
+      "expectedConditional": ["guide:readme", "guide:best-practices"],
+      "expectedNotSelected": [
+        "skill:fix-library-regression",
+        "skill:cover-library-with-tests"
+      ],
+      "expectedOverlays": ["overlay:verification-only"]
+    }
+  ]
+}

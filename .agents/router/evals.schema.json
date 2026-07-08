@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "1000fetches agent router evals",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cases"],
+  "properties": {
+    "cases": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/evalCase" }
+    }
+  },
+  "$defs": {
+    "evalCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "prompt",
+        "expectedRoute",
+        "expectedSkill",
+        "expectedMandatory",
+        "expectedConditional",
+        "expectedNotSelected",
+        "expectedOverlays"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "prompt": { "type": "string" },
+        "expectedRoute": { "type": "string" },
+        "expectedSkill": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }]
+        },
+        "expectedMandatory": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "expectedConditional": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "expectedNotSelected": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "expectedOverlays": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

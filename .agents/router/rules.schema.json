@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "1000fetches agent router rules",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "fallbackRoute", "matching", "references", "routes"],
+  "properties": {
+    "version": { "type": "number" },
+    "fallbackRoute": { "type": "string" },
+    "matching": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["threshold", "taskModePrecedence"],
+      "properties": {
+        "threshold": { "type": "number" },
+        "taskModePrecedence": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "raw",
+        "guides",
+        "skills",
+        "globalSkills",
+        "overlays",
+        "adapters",
+        "commands"
+      ],
+      "properties": {
+        "raw": { "$ref": "#/$defs/referenceMap" },
+        "guides": { "$ref": "#/$defs/referenceMap" },
+        "skills": { "$ref": "#/$defs/referenceMap" },
+        "globalSkills": { "$ref": "#/$defs/referenceMap" },
+        "overlays": { "$ref": "#/$defs/referenceMap" },
+        "adapters": { "$ref": "#/$defs/referenceMap" },
+        "commands": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/commandReference" }
+        }
+      }
+    },
+    "routes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/route" }
+    }
+  },
+  "$defs": {
+    "referenceMap": {
+      "type": "object",
+      "patternProperties": {
+        "^.+$": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "commandReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["script", "description"],
+      "properties": {
+        "script": { "type": "string" },
+        "description": { "type": "string" }
+      }
+    },
+    "triggers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["keywords", "paths", "regex"],
+      "properties": {
+        "keywords": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "paths": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "regex": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "description",
+        "priority",
+        "skill",
+        "taskModes",
+        "triggers",
+        "mandatory",
+        "conditional",
+        "notSelected",
+        "verification"
+      ],
+      "properties": {
+        "id": { "type": "string" },
+        "description": { "type": "string" },
+        "priority": { "type": "number" },
+        "skill": {
+          "anyOf": [{ "type": "string" }, { "type": "null" }]
+        },
+        "taskModes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "triggers": { "$ref": "#/$defs/triggers" },
+        "mandatory": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "conditional": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "notSelected": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "verification": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}
